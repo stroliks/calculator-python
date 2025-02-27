@@ -111,22 +111,24 @@ class CalculatorModel:
 
     def update_memory_operation(self, operation):
 
-        if self.__left_memory != 0 and self._operation_memory is CalculatorModel.NOT_OPERATION:
-            self._operation_memory = operation
+        if self.__right_memory != 0 and not (self._operation_memory is CalculatorModel.NOT_OPERATION):
 
-        if CalculatorModel.ADD in self._operation_memory and self.__right_memory != 0:
-            self.add()
-            self._operation_memory = operation
-            memory_view = self.presenter_memory()
-            self.__view.update_output(memory_view)
-            return
+            if CalculatorModel.ADD in self._operation_memory:
+                self.add()
+                self._operation_memory = operation
+                memory_view = self.presenter_memory()
+                self.__view.update_output(memory_view)
+                return
 
-        elif CalculatorModel.SUB in self._operation_memory and self.__right_memory != 0:
-            self.sub()
+            elif CalculatorModel.SUB in self._operation_memory:
+                self.sub()
+                self._operation_memory = operation
+                memory_view = self.presenter_memory()
+                self.__view.update_output(memory_view)
+                return
+
+        if self.__left_memory != 0:
             self._operation_memory = operation
-            memory_view = self.presenter_memory()
-            self.__view.update_output(memory_view)
-            return
 
         memory_view = self.presenter_memory()
         self.__view.update_output(memory_view)
