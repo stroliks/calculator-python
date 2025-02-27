@@ -1,4 +1,7 @@
 from __future__ import annotations
+
+import tkinter
+
 from customtkinter import *
 
 
@@ -174,45 +177,59 @@ class CalculatorViewer:
 
     def __create_window(self):
         window = CTk()
-        window.geometry("400x800")
+        window.geometry("387x300")
+        window.title("Калькулятор")
 
         return window
 
     def __create_widgets(self):
-        self.output_label = CTkLabel(self.root_window, text="???")
-        self.output_label.grid(row=0, columnspan=2)
+        self.output_label = CTkLabel(self.root_window, font=(None, 20), width=380, text="0")
+        self.output_label.grid(row=0, columnspan=4)
 
-        self.btn_0 = CTkButton(self.root_window, text=" 0 ")
-        self.btn_0.grid(row=4, column=0)
+        self.btn_0 = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" 0 ")
+        self.btn_0.grid(row=4, column=0, padx=3, pady=3)
 
-        self.btn_1 = CTkButton(self.root_window, text=" 1 ")
-        self.btn_1.grid(row=3, column=0)
+        self.btn_1 = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" 1 ")
+        self.btn_1.grid(row=3, column=0, padx=3, pady=3)
 
-        self.btn_4 = CTkButton(self.root_window, text=" 4 ")
-        self.btn_4.grid(row=2, column=0)
+        self.btn_4 = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" 4 ")
+        self.btn_4.grid(row=2, column=0, padx=3, pady=3)
 
-        self.btn_7 = CTkButton(self.root_window, text=" 7 ")
-        self.btn_7.grid(row=1, column=0)
+        self.btn_7 = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" 7 ")
+        self.btn_7.grid(row=1, column=0, padx=3, pady=3)
 
-        self.btn_8 = CTkButton(self.root_window, text=" 8 ")
-        self.btn_8.grid(row=1, column=1)
+        self.btn_8 = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" 8 ")
+        self.btn_8.grid(row=1, column=1, padx=3, pady=3)
 
-        self.btn_5 = CTkButton(self.root_window, text=" 5 ")
-        self.btn_5.grid(row=2, column=1)
+        self.btn_5 = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" 5 ")
+        self.btn_5.grid(row=2, column=1, padx=3, pady=3)
 
-        self.btn_2 = CTkButton(self.root_window, text=" 2 ")
-        self.btn_2.grid(row=3, column=1)
+        self.btn_2 = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" 2 ")
+        self.btn_2.grid(row=3, column=1, padx=3, pady=3)
 
-        #...
-        #...
-        #...
+        self.btn_dot = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" . ")
+        self.btn_dot.grid(row=4, column=1, padx=3, pady=3)
 
+        self.btn_9 = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" 9 ")
+        self.btn_9.grid(row=1, column=2, padx=3, pady=3)
 
-        self.btn_add_operation = CTkButton(self.root_window, text=" + ")
-        self.btn_add_operation.grid(row=4, column=3)
+        self.btn_6 = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" 6 ")
+        self.btn_6.grid(row=2, column=2, padx=3, pady=3)
 
-        # ('7', 1, 0), ('8', 1, 1), ('9', 1, 2), ('/', 1, 3),
-        # ('4', 2, 0), ('5', 2, 1), ('6', 2, 2), ('*', 2, 3),
-        # ('1', 3, 0), ('2', 3, 1), ('3', 3, 2), ('-', 3, 3),
-        # ('0', 4, 0), ('.', 4, 1), ('=', 4, 2), ('+', 4, 3)
+        self.btn_3 = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" 3 ")
+        self.btn_3.grid(row=3, column=2, padx=3, pady=3)
 
+        self.btn_eq = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" = ")
+        self.btn_eq.grid(row=4, column=2, padx=3, pady=3)
+
+        self.btn_div = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" / ")
+        self.btn_div.grid(row=1, column=3, padx=3, pady=3)
+
+        self.btn_multi = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" * ")
+        self.btn_multi.grid(row=2, column=3, padx=3, pady=3)
+
+        self.btn_sub = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" - ")
+        self.btn_sub.grid(row=3, column=3, padx=3, pady=3)
+
+        self.btn_add_operation = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" + ")
+        self.btn_add_operation.grid(row=4, column=3, padx=3, pady=3)
