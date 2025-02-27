@@ -28,6 +28,8 @@ class Calculator:
         self.__viewer.add_handler_on_click_btn_9(self.__handler_on_click_btn_9)
         self.__viewer.add_handler_on_click_btn_0(self.__handler_on_click_btn_0)
         self.__viewer.add_handler_on_click_btn_add_operation(self.__handler_on_click_btn_add)
+        self.__viewer.add_handler_on_click_btn_sub_operation(self.__handler_on_click_btn_sub)
+        self.__viewer.add_handler_on_click_btn_eq(self.__handler_on_click_btn_eq)
         self.__viewer.add_handler_on_click_btn_cancel(self.__handler_on_click_btn_cancel)
 
     def __handler_on_click_btn_1(self):
@@ -108,16 +110,27 @@ class CalculatorModel:
         self.__view.update_output(memory_view)
 
     def update_memory_operation(self, operation):
-        self._operation_memory = operation
 
-        if not (self._operation_memory is CalculatorModel.NOT_OPERATION) and self.__right_memory != 0:
+        if self.__left_memory != 0 and self._operation_memory is CalculatorModel.NOT_OPERATION:
+            self._operation_memory = operation
 
-            if CalculatorModel.ADD in self._operation_memory:
-                self.add()
-                return
+        if CalculatorModel.ADD in self._operation_memory and self.__right_memory != 0:
+            self.add()
+            self._operation_memory = operation
+            memory_view = self.presenter_memory()
+            self.__view.update_output(memory_view)
+            return
+
+        elif CalculatorModel.SUB in self._operation_memory and self.__right_memory != 0:
+            self.sub()
+            self._operation_memory = operation
+            memory_view = self.presenter_memory()
+            self.__view.update_output(memory_view)
+            return
 
         memory_view = self.presenter_memory()
         self.__view.update_output(memory_view)
+
 
     def clear_memory(self):
 
@@ -125,49 +138,59 @@ class CalculatorModel:
         self.__right_memory = 0
         self._operation_memory = CalculatorModel.NOT_OPERATION
 
-        memory_view = 0
+        memory_view = self.presenter_memory()
         self.__view.update_output(memory_view)
 
     def presenter_memory(self):
         result = str(self.__left_memory) + self._operation_memory
 
-        if self.__right_memory != 0:
-            result += str(self.__right_memory)
+        if self.__right_memory != 0 and self._operation_memory != CalculatorModel.NOT_OPERATION:
+            result = str(self.__right_memory)
 
         return result
 
     def add(self):
         self.__left_memory += self.__right_memory
         self.__right_memory = 0
-        self._operation_memory = CalculatorModel.NOT_OPERATION
+
+        memory_view = self.presenter_memory()
+        self.__view.update_output(memory_view)
+
+    def sub(self):
+        self.__left_memory -= self.__right_memory
+        self.__right_memory = 0
 
         memory_view = self.presenter_memory()
         self.__view.update_output(memory_view)
 
 
-
     def solver(self):
         flag = False
-        operation = ""
 
-        if CalculatorModel.ADD in self.__left_memory:
+        if CalculatorModel.ADD in self._operation_memory:
             flag = True
-            operation = CalculatorModel.ADD
+            self.add()
 
-        elif CalculatorModel.SUB in self.__left_memory:
+        elif CalculatorModel.SUB in self._operation_memory:
             flag = True
-            operation = CalculatorModel.SUB
+            self.sub()
 
-        elif CalculatorModel.DIV in self.__left_memory:
+        elif CalculatorModel.DIV in self._operation_memory:
             flag = True
             operation = CalculatorModel.DIV
 
-        elif CalculatorModel.MULTI in self.__left_memory:
+        elif CalculatorModel.MULTI in self._operation_memory:
             flag = True
             operation = CalculatorModel.MULTI
 
-        if not flag: return
+        self._operation_memory = CalculatorModel.NOT_OPERATION
+        memory_view = self.presenter_memory()
+        self.__view.update_output(memory_view)
+        self.__left_memory = 0
+        self.__right_memory = 0
 
+        if not flag:
+            return
 
 
 class CalculatorViewer:
@@ -217,6 +240,12 @@ class CalculatorViewer:
 
     def add_handler_on_click_btn_add_operation(self, handler):
         self.btn_add_operation.configure(command=handler)
+
+    def add_handler_on_click_btn_sub_operation(self, handler):
+        self.btn_sub_operation.configure(command=handler)
+
+    def add_handler_on_click_btn_eq(self, handler):
+        self.btn_eq.configure(command=handler)
 
     def add_handler_on_click_btn_cancel(self, handler):
         self.btn_cancel.configure(command=handler)
@@ -274,8 +303,8 @@ class CalculatorViewer:
         self.btn_multi = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" * ")
         self.btn_multi.grid(row=2, column=3, padx=3, pady=3)
 
-        self.btn_sub = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" - ")
-        self.btn_sub.grid(row=3, column=3, padx=3, pady=3)
+        self.btn_sub_operation = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" - ")
+        self.btn_sub_operation.grid(row=3, column=3, padx=3, pady=3)
 
         self.btn_add_operation = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" + ")
         self.btn_add_operation.grid(row=4, column=3, padx=3, pady=3)
