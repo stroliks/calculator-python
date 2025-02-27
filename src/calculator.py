@@ -19,7 +19,16 @@ class Calculator:
     def registration_events_buttons(self):
         self.__viewer.add_handler_on_click_btn_1(self.__handler_on_click_btn_1)
         self.__viewer.add_handler_on_click_btn_2(self.__handler_on_click_btn_2)
+        self.__viewer.add_handler_on_click_btn_3(self.__handler_on_click_btn_3)
+        self.__viewer.add_handler_on_click_btn_4(self.__handler_on_click_btn_4)
+        self.__viewer.add_handler_on_click_btn_5(self.__handler_on_click_btn_5)
+        self.__viewer.add_handler_on_click_btn_6(self.__handler_on_click_btn_6)
+        self.__viewer.add_handler_on_click_btn_7(self.__handler_on_click_btn_7)
+        self.__viewer.add_handler_on_click_btn_8(self.__handler_on_click_btn_8)
+        self.__viewer.add_handler_on_click_btn_9(self.__handler_on_click_btn_9)
+        self.__viewer.add_handler_on_click_btn_0(self.__handler_on_click_btn_0)
         self.__viewer.add_handler_on_click_btn_add_operation(self.__handler_on_click_btn_add)
+        self.__viewer.add_handler_on_click_btn_cancel(self.__handler_on_click_btn_cancel)
 
     def __handler_on_click_btn_1(self):
         self.__model.update_memory(1)
@@ -28,28 +37,28 @@ class Calculator:
         self.__model.update_memory(2)
 
     def __handler_on_click_btn_3(self):
-        self.__model.update_memory("3")
+        self.__model.update_memory(3)
 
     def __handler_on_click_btn_4(self):
-        self.__model.update_memory("4")
+        self.__model.update_memory(4)
 
     def __handler_on_click_btn_5(self):
-        self.__model.update_memory("5")
+        self.__model.update_memory(5)
 
     def __handler_on_click_btn_6(self):
-        self.__model.update_memory('6')
+        self.__model.update_memory(6)
 
     def __handler_on_click_btn_7(self):
-        self.__model.update_memory("7")
+        self.__model.update_memory(7)
 
     def __handler_on_click_btn_8(self):
-        self.__model.update_memory("8")
+        self.__model.update_memory(8)
 
     def __handler_on_click_btn_9(self):
-        self.__model.update_memory("9")
+        self.__model.update_memory(9)
 
     def __handler_on_click_btn_0(self):
-        self.__model.update_memory("0")
+        self.__model.update_memory(0)
 
     def __handler_on_click_btn_add(self):
         self.__model.update_memory_operation(CalculatorModel.ADD)
@@ -58,13 +67,16 @@ class Calculator:
         self.__model.update_memory_operation(CalculatorModel.SUB)
 
     def __handler_on_click_btn_multi(self):
-        self.__model.update_memory("0")
+        self.__model.update_memory(0)
 
     def __handler_on_click_btn_div(self):
-        self.__model.update_memory("0")
+        self.__model.update_memory(0)
 
     def __handler_on_click_btn_eq(self):
         self.__model.solver()
+
+    def __handler_on_click_btn_cancel(self):
+        self.__model.clear_memory()
 
 class CalculatorModel:
 
@@ -107,13 +119,22 @@ class CalculatorModel:
         memory_view = self.presenter_memory()
         self.__view.update_output(memory_view)
 
+    def clear_memory(self):
+
+        self.__left_memory = 0
+        self.__right_memory = 0
+        self._operation_memory = CalculatorModel.NOT_OPERATION
+
+        memory_view = 0
+        self.__view.update_output(memory_view)
+
     def presenter_memory(self):
         result = str(self.__left_memory) + self._operation_memory
 
         if self.__right_memory != 0:
             result += str(self.__right_memory)
 
-        return  result
+        return result
 
     def add(self):
         self.__left_memory += self.__right_memory
@@ -145,7 +166,7 @@ class CalculatorModel:
             flag = True
             operation = CalculatorModel.MULTI
 
-        if not flag : return
+        if not flag: return
 
 
 
@@ -170,10 +191,35 @@ class CalculatorViewer:
     def add_handler_on_click_btn_2(self, handler):
         self.btn_2.configure(command=handler)
 
+    def add_handler_on_click_btn_3(self, handler):
+        self.btn_3.configure(command=handler)
+
+    def add_handler_on_click_btn_4(self, handler):
+        self.btn_4.configure(command=handler)
+
+    def add_handler_on_click_btn_5(self, handler):
+        self.btn_5.configure(command=handler)
+
+    def add_handler_on_click_btn_6(self, handler):
+        self.btn_6.configure(command=handler)
+
+    def add_handler_on_click_btn_7(self, handler):
+        self.btn_7.configure(command=handler)
+
+    def add_handler_on_click_btn_8(self, handler):
+        self.btn_8.configure(command=handler)
+
+    def add_handler_on_click_btn_9(self, handler):
+        self.btn_9.configure(command=handler)
+
+    def add_handler_on_click_btn_0(self, handler):
+        self.btn_0.configure(command=handler)
+
     def add_handler_on_click_btn_add_operation(self, handler):
         self.btn_add_operation.configure(command=handler)
 
-
+    def add_handler_on_click_btn_cancel(self, handler):
+        self.btn_cancel.configure(command=handler)
 
     def __create_window(self):
         window = CTk()
@@ -207,8 +253,8 @@ class CalculatorViewer:
         self.btn_2 = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" 2 ")
         self.btn_2.grid(row=3, column=1, padx=3, pady=3)
 
-        self.btn_dot = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" . ")
-        self.btn_dot.grid(row=4, column=1, padx=3, pady=3)
+        self.btn_cancel = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" C ")
+        self.btn_cancel.grid(row=4, column=1, padx=3, pady=3)
 
         self.btn_9 = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" 9 ")
         self.btn_9.grid(row=1, column=2, padx=3, pady=3)
