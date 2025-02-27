@@ -29,6 +29,7 @@ class Calculator:
         self.__viewer.add_handler_on_click_btn_0(self.__handler_on_click_btn_0)
         self.__viewer.add_handler_on_click_btn_add_operation(self.__handler_on_click_btn_add)
         self.__viewer.add_handler_on_click_btn_sub_operation(self.__handler_on_click_btn_sub)
+        self.__viewer.add_handler_on_click_btn_multi_operation(self.__handler_on_click_btn_multi)
         self.__viewer.add_handler_on_click_btn_eq(self.__handler_on_click_btn_eq)
         self.__viewer.add_handler_on_click_btn_cancel(self.__handler_on_click_btn_cancel)
 
@@ -69,7 +70,7 @@ class Calculator:
         self.__model.update_memory_operation(CalculatorModel.SUB)
 
     def __handler_on_click_btn_multi(self):
-        self.__model.update_memory(0)
+        self.__model.update_memory_operation(CalculatorModel.MULTI)
 
     def __handler_on_click_btn_div(self):
         self.__model.update_memory(0)
@@ -127,6 +128,13 @@ class CalculatorModel:
                 self.__view.update_output(memory_view)
                 return
 
+            elif CalculatorModel.MULTI in self._operation_memory:
+                self.multi()
+                self._operation_memory = operation
+                memory_view = self.presenter_memory()
+                self.__view.update_output(memory_view)
+                return
+
         if self.__left_memory != 0:
             self._operation_memory = operation
 
@@ -135,7 +143,6 @@ class CalculatorModel:
 
 
     def clear_memory(self):
-
         self.__left_memory = 0
         self.__right_memory = 0
         self._operation_memory = CalculatorModel.NOT_OPERATION
@@ -165,6 +172,13 @@ class CalculatorModel:
         memory_view = self.presenter_memory()
         self.__view.update_output(memory_view)
 
+    def multi(self):
+        self.__left_memory *= self.__right_memory
+        self.__right_memory = 0
+
+        memory_view = self.presenter_memory()
+        self.__view.update_output(memory_view)
+
 
     def solver(self):
         flag = False
@@ -179,11 +193,11 @@ class CalculatorModel:
 
         elif CalculatorModel.DIV in self._operation_memory:
             flag = True
-            operation = CalculatorModel.DIV
+
 
         elif CalculatorModel.MULTI in self._operation_memory:
             flag = True
-            operation = CalculatorModel.MULTI
+            self.multi()
 
         self._operation_memory = CalculatorModel.NOT_OPERATION
         memory_view = self.presenter_memory()
@@ -246,6 +260,9 @@ class CalculatorViewer:
     def add_handler_on_click_btn_sub_operation(self, handler):
         self.btn_sub_operation.configure(command=handler)
 
+    def add_handler_on_click_btn_multi_operation(self, handler):
+        self.btn_multi_operation.configure(command=handler)
+
     def add_handler_on_click_btn_eq(self, handler):
         self.btn_eq.configure(command=handler)
 
@@ -302,8 +319,8 @@ class CalculatorViewer:
         self.btn_div = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" / ")
         self.btn_div.grid(row=1, column=3, padx=3, pady=3)
 
-        self.btn_multi = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" * ")
-        self.btn_multi.grid(row=2, column=3, padx=3, pady=3)
+        self.btn_multi_operation = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" * ")
+        self.btn_multi_operation.grid(row=2, column=3, padx=3, pady=3)
 
         self.btn_sub_operation = CTkButton(self.root_window, font=(None, 20), width=90, height=60, text=" - ")
         self.btn_sub_operation.grid(row=3, column=3, padx=3, pady=3)
