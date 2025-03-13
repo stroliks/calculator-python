@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import customtkinter
+
 from customtkinter import *
 
 class Calculator:
@@ -17,30 +18,52 @@ class CalculatorModel:
 
     def __init__(self, view: CalculatorViewer):
         self.__view = view
+        self.activate_second_value = False
+        self.first_result = 0
+        self.second_result = 0
+        self.action = None
+
 
     def handler_data(self, value):
+
         result = int(self.__view.output_label.cget("text"))
-        try:
-            first_result = result*10+int(value)
-            self.__view.update_output(first_result)
-        except:
-            if value == "=":
-                if pre_value == "*":
-                    view_result = first_result * result
-                elif pre_value == "+":
-                    view_result = first_result + result
-                elif pre_value == "-":
-                    view_result = first_result - result
-                elif pre_value == "/":
-                    view_result = first_result / result
-                else:
-                    view_result = result
-                self.__view.update_output(view_result)
-                activate = False
-            pre_value = value
-            activate = True
-            view_result = result
-            self.__view.update_output(view_result)
+        if not self.activate_second_value:
+            try:
+                self.first_result = result*10+int(value)
+                self.__view.update_output(self.first_result)
+
+            except:
+                self.operation(value)
+            return
+        self.second_result = result * 10 + int(value)
+        self.__view.update_output(self.second_result)
+
+
+    def operation(self, value):
+                if value == "=":
+                    if self.action == "*":
+                        view_result = self.first_result * self.second_result
+                    elif self.action == "+":
+                        view_result = self.first_result + self.second_result
+                    elif self.action == "-":
+                        view_result = self.first_result - self.second_result
+                    elif self.action == "/":
+                        view_result = self.first_result / self.second_result
+                    elif self.action == "C":
+                        self.activate_second_value = False
+                        self.second_result = 0
+                        self.first_result = 0
+                        self.action = None
+                        view_result = self.first_result
+                    self.__view.update_output(view_result)
+                    self.first_result = view_result
+                    self.activate_second_value = False
+                    return
+
+                self.action = value
+                self.activate_second_value = True
+                self.__view.update_output(0)
+                return
 
 
 class CalculatorViewer:
@@ -64,8 +87,8 @@ class CalculatorViewer:
     def handler_on_click_btn(self, index):
 
         btn_value = self.button[index].cget("text")
-        model = CalculatorModel(self)
-        model.handler_data(btn_value)
+        calculator.model.handler_data(btn_value)
+
 
 
     def create_widgets(self,):
