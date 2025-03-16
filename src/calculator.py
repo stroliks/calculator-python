@@ -4,6 +4,8 @@ import customtkinter
 
 from customtkinter import *
 
+
+
 class Calculator:
 
     def __init__(self):
@@ -84,10 +86,9 @@ class CalculatorViewer:
 
         return window
 
-    def handler_on_click_btn(self, index):
-
-        btn_value = self.button[index].cget("text")
-        calculator.model.handler_data(btn_value)
+    def handler_on_click_btn(self):
+        btn_value = self.btn.cget('text')
+        CalculatorModel(self).handler_data(btn_value)
 
 
 
@@ -103,7 +104,8 @@ class CalculatorViewer:
 
         for i in range(1,5):
             for j in range(0,4):
-                self.btn = customtkinter.CTkButton(self.root_window, text=vidgets[index], command=lambda index=index: self.handler_on_click_btn(index))
+                self.btn = customtkinter.CTkButton(self.root_window, text=vidgets[index],
+                                                   command=lambda btn =self.btn: self.handler_on_click_btn())
                 self.btn.grid(row=i, column=j)
                 self.button.append(self.btn)
                 index += 1
