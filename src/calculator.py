@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+
 import customtkinter
+
+import tkinter
 
 from customtkinter import *
 
@@ -13,6 +16,7 @@ class Calculator:
 
     def run(self):
         self.model.root_window()
+
 
 
 class CalculatorModel:
@@ -66,11 +70,6 @@ class CalculatorModel:
                     self.activate_second_value = False
                     return
 
-                self.action = value
-                self.activate_second_value = True
-                self.__view.update_output(0)
-                return
-
 
     class CalculatorViewer:
 
@@ -88,14 +87,6 @@ class CalculatorModel:
         def create_window(self):
             window = CTk()
             window.geometry("400x200")
-
-            return window
-
-        def handler_on_click_btn(self, index):
-            btn_value = self.button[index]
-            self.handler_data(btn_value)
-
-
 
         def create_widgets(self,):
             vidgets = ["7","8","9","C","4","5","6","/","1","2","3","*","0","=","+","-",]
